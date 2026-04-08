@@ -2,10 +2,10 @@ import os
 import discord
 from discord.ext import commands
 
-# ⚠️ NON scrivere il token qui! Lo prende dalle variabili d'ambiente
+# Prende i valori dalle variabili d'ambiente
 TOKEN = os.getenv('TOKEN')
 TARGET_CHANNEL_ID = int(os.getenv('TARGET_CHANNEL_ID', 0))
-BAN_REASON = "You have been kicked for posting in a restricted channel."
+BAN_REASON = "You have been kicked for posting in a restricted channel"
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -16,6 +16,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 @bot.event
 async def on_ready():
     print(f"✅ Bot connesso come {bot.user}")
+    print(f"🎯 Monitoraggio canale ID: {TARGET_CHANNEL_ID}")
 
 @bot.event
 async def on_message(message):
@@ -23,17 +24,49 @@ async def on_message(message):
         return
     
     if message.channel.id == TARGET_CHANNEL_ID:
+        user = message.author
+        
         try:
-            await message.author.ban(reason=BAN_REASON)
-            print(f"🔨 Bannato {message.author.name}")
+            # 1. Prova a mandare un DM all'utente
+            try:
+                dm = await user.create_dm()
+                await dm.send(f"**You have been banned** for posting in a restricted channel.\n\nMotivo: {BAN_REASON}")
+                print(f"📨 DM inviato a {user.name}")
+            except discord.Forbidden:
+                print(f"⚠️ Impossibile inviare DM a {user.name} (DM chiusi)")
+            except Exception as e:
+                print(f"⚠️ Errore nell'invio del DM a {user.name}: {e}")
+            
+            # 2. Banna l'utente
+            await user.ban(reason=BAN_REASON)
+            print(f"🔨 Bannato {user.name} (ID: {user.id})")
+            
+            # 3. Messaggio di conferma nel canale (opzionale)
+            await message.channel.send(f"🔨 {user.mention} è stato bannato!", delete_after=5)
+            
+        except discord.Forbidden:
+            print(f"❌ Permessi insufficienti per bannare {user.name}")
+            await message.channel.send(f"❌ Non ho i permessi per bannare {user.mention}!")
         except Exception as e:
-            print(f"❌ Errore: {e}")
+            print(f"❌ Errore generale: {e}")
     
     await bot.process_commands(message)
 
 @bot.command()
 async def status(ctx):
-    await ctx.send(f"🟢 Bot attivo - Monitoro <#{TARGET_CHANNEL_ID}>")
+    """Mostra lo stato del bot"""
+    await ctx.send(f"🟢 Bot attivo - Monitoro il canale <#{TARGET_CHANNEL_ID}>")
+
+@bot.command()
+@commands.has_permissions(administrator=True)
+async def test_dm(ctx, member: discord.Member):
+    """Comando di test per verificare l'invio dei DM (solo admin)"""
+    try:
+        dm = await member.create_dm()
+        await dm.send("🧪 Questo è un messaggio di test dal bot!")
+        await ctx.send(f"✅ DM inviato a {member.mention}")
+    except Exception as e:
+        await ctx.send(f"❌ Errore: {e}")
 
 if __name__ == "__main__":
     bot.run(TOKEN)
