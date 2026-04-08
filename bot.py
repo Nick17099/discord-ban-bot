@@ -30,7 +30,7 @@ async def on_message(message):
             # 1. Prova a mandare un DM all'utente
             try:
                 dm = await user.create_dm()
-                await dm.send(f"**You have been banned** for posting in a restricted channel.\n\nMotivo: {BAN_REASON}")
+                await dm.send(f"**You have been banned** for posting in a restricted channel.
                 print(f"📨 DM inviato a {user.name}")
             except discord.Forbidden:
                 print(f"⚠️ Impossibile inviare DM a {user.name} (DM chiusi)")
