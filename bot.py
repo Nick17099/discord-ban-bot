@@ -1,6 +1,33 @@
 import discord
 from discord.ext import commands
 
+import os
+import discord
+from discord.ext import commands
+
+# === TEST: Verifica che le variabili vengano lette ===
+TOKEN = os.getenv('TOKEN')
+TARGET_CHANNEL_ID = os.getenv('TARGET_CHANNEL_ID')
+
+print(f"🔍 TOKEN letto: {'SI' if TOKEN else 'NO'} (lunghezza: {len(TOKEN) if TOKEN else 0})")
+print(f"🔍 TARGET_CHANNEL_ID letto: {TARGET_CHANNEL_ID}")
+
+if not TOKEN:
+    print("❌ ERRORE: TOKEN non trovato nelle variabili d'ambiente!")
+    exit(1)
+
+if not TARGET_CHANNEL_ID:
+    print("❌ ERRORE: TARGET_CHANNEL_ID non trovato!")
+    exit(1)
+
+# Converti in intero
+TARGET_CHANNEL_ID = int(TARGET_CHANNEL_ID)
+# === FINE TEST ===
+
+BAN_REASON = "Hai scritto in un canale vietato"
+
+# ... resto del codice ...
+
 # === CONFIGURAZIONE - MODIFICA QUESTI VALORI! ===
 TOKEN = "MTQ5MTQxNTE4NzQ4MjIxODUwNg.GsDPmL.TDUQCHtWdKAkVx5RtEO_Ic7BJnZgjWzFYL-QVI"  # 👈 METTI IL TOKEN VERO!
 TARGET_CHANNEL_ID = 1491412208347910194  # 👈 METTI L'ID DEL CANALE VERO!
