@@ -30,12 +30,12 @@ async def on_message(message):
             # 1. Prova a mandare un DM all'utente
             try:
                 dm = await user.create_dm()
-                await dm.send(f"**You have been banned** for posting in a restricted channel.
+                await dm.send(f"**You have been banned** for posting in a restricted channel.")
                 print(f"📨 DM inviato a {user.name}")
             except discord.Forbidden:
-                print(f"⚠️ Impossibile inviare DM a {user.name} (DM chiusi)")
+                print(f"⚠️ Impossible to send a dm to {user.name} (DM closed)")
             except Exception as e:
-                print(f"⚠️ Errore nell'invio del DM a {user.name}: {e}")
+                print(f"⚠️ Error {user.name}: {e}")
             
             # 2. Banna l'utente
             await user.ban(reason=BAN_REASON)
@@ -45,10 +45,10 @@ async def on_message(message):
             await message.channel.send(f"🔨 {user.mention} è stato bannato!", delete_after=5)
             
         except discord.Forbidden:
-            print(f"❌ Permessi insufficienti per bannare {user.name}")
-            await message.channel.send(f"❌ Non ho i permessi per bannare {user.mention}!")
+            print(f"Cant ban {user.name}")
+            await message.channel.send(f"Cant ban {user.mention}!")
         except Exception as e:
-            print(f"❌ Errore generale: {e}")
+            print(f"❌ Error: {e}")
     
     await bot.process_commands(message)
 
@@ -66,7 +66,7 @@ async def test_dm(ctx, member: discord.Member):
         await dm.send("🧪 Questo è un messaggio di test dal bot!")
         await ctx.send(f"✅ DM inviato a {member.mention}")
     except Exception as e:
-        await ctx.send(f"❌ Errore: {e}")
+        await ctx.send(f"❌ Error: {e}")
 
 if __name__ == "__main__":
     bot.run(TOKEN)
