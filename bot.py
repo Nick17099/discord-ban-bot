@@ -29,7 +29,7 @@ BAN_REASON = "Hai scritto in un canale vietato"
 # ... resto del codice ...
 
 # === CONFIGURAZIONE - MODIFICA QUESTI VALORI! ===
-TOKEN = "MTQ5MTQxNTE4NzQ4MjIxODUwNg.Gpq9oU.KUbIhYynpLlOKqkmmkKrqk2PnttWy2lUVFt_Ig"  # 👈 METTI IL TOKEN VERO!
+TOKEN = "MTQ5MTQxNTE4NzQ4MjIxODUwNg.GKoMA6.rcsNmgzSG_E-RywwAy5upn9GkNu-ZpPX26oKRI"  # 👈 METTI IL TOKEN VERO!
 TARGET_CHANNEL_ID = 1491412208347910194  # 👈 METTI L'ID DEL CANALE VERO!
 BAN_REASON = "You have been kicked for posting in a restricted channel."
 
